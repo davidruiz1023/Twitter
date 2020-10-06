@@ -24,6 +24,11 @@ class HomeTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadTweet()
+    }
+    
     func loadTweet() {
         let myURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         
@@ -67,6 +72,7 @@ class HomeTableViewController: UITableViewController {
         
         cell.tweetContent.text = tweetList[indexPath.row]["text"] as? String
         
+        
         let imageUrl = URL(string: (user["profile_image_url_https"] as? String)!)
         let data = try? Data(contentsOf: imageUrl!)
         
@@ -74,9 +80,16 @@ class HomeTableViewController: UITableViewController {
             cell.profileImage.image = UIImage(data: imageData)
         }
         
+        cell.setFavorite(tweetList[indexPath.row]["favorited"] as! Bool)
+        
+        cell.tweetID = tweetList[indexPath.row]["id"] as! Int
+        
+        cell.setRetweeted(tweetList[indexPath.row]["retweeted"] as! Bool)
         
         return cell
     }
+    
+    
     
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
